@@ -3,12 +3,10 @@
     [clj-slack.channels :as channels]
     [clj-slack.groups :as groups]
     [clj-slack.users :as users]
-    [clj-slack.chat :as chat]
-    [clj-slack.core :refer [slack-request stringify-keys]])
-    (:refer-clojure :exclude [list]))
+    [clj-slack.chat :as chat]))
 
 
-(def token "xxxxredacted")
+(def token "redacted")
 (def connection  {:api-url "https://slack.com/api" :token token})
 
 (def channel-list
@@ -28,13 +26,9 @@
         channel-info (channels/info connection channel-code)]
     (get-in channel-info [:channel :members])))
 
-(defn groups-info
-  [connection group-id]
-    (slack-request connection "groups.info" {"group" group-id}))
-
 (defn group-users [group]
   (let [group-code (group->code group)
-        group-info (groups-info connection group-code)]
+        group-info (groups/info connection group-code)]
     (get-in group-info [:group :members])))
 
 (defn slackable-users [channel exclusion-channel]
